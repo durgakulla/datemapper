@@ -222,6 +222,16 @@ export default function App() {
     save({ labels: updatedLabels, dateMappings: updatedMappings });
   };
 
+  const handleMoveLabel = (id, dir) => {
+    const idx = labels.findIndex(l => l.id === id);
+    const next = idx + dir;
+    if (next < 0 || next >= labels.length) return;
+    const updated = [...labels];
+    [updated[idx], updated[next]] = [updated[next], updated[idx]];
+    setLabels(updated);
+    save({ labels: updated });
+  };
+
   const handleAddLabel = () => {
     const id = `label-${Date.now()}`;
     const colors = ['#6aaee8', '#e87878', '#5cc98a', '#e8c05a', '#a57ee0', '#e8954a', '#4abcd4', '#e8709c'];
@@ -244,9 +254,16 @@ export default function App() {
   const isDraggingRef = useRef(false);
 
   const handleDayMouseDown = (key) => {
-    const hasHighlight = !!dateMappings[key];
-    const mode = hasHighlight ? 'delete' : 'add';
-    if (mode === 'add' && !selectedLabel) return;
+    const cellLabel = dateMappings[key];
+    // With a selected label: toggle off if same label, otherwise replace/add
+    // Without a selected label: delete any highlight
+    let mode;
+    if (selectedLabel) {
+      mode = cellLabel === selectedLabel.id ? 'delete' : 'add';
+    } else {
+      if (!cellLabel) return;
+      mode = 'delete';
+    }
     const pending = { ...dateMappings };
     if (mode === 'add') { pending[key] = selectedLabel.id; } else { delete pending[key]; }
     setDateMappings(pending);
@@ -376,6 +393,7 @@ export default function App() {
             selectedLabel={selectedLabel}
             onSelectLabel={setSelectedLabel}
             onUpdateLabel={handleUpdateLabel}
+            onMoveLabel={handleMoveLabel}
             onAddLabel={handleAddLabel}
             onDeleteLabel={handleDeleteLabel}
             onClearAll={handleClearAll}

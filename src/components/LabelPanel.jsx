@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './LabelPanel.css';
 
 const PRESET_COLORS = [
@@ -7,10 +7,20 @@ const PRESET_COLORS = [
   '#7ec468', '#d4c84a', '#7098d4', '#d47098',
 ];
 
-export default function LabelPanel({ labels, labelCounts = {}, selectedLabel, onSelectLabel, onUpdateLabel, onAddLabel, onDeleteLabel, onClearAll }) {
+export default function LabelPanel({ labels, labelCounts = {}, selectedLabel, onSelectLabel, onUpdateLabel, onMoveLabel, onAddLabel, onDeleteLabel, onClearAll }) {
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState('');
   const [editColor, setEditColor] = useState('');
+  const editFormRef = useRef(null);
+
+  useEffect(() => {
+    if (!editingId) return;
+    const handleClick = (e) => {
+      if (editFormRef.current && !editFormRef.current.contains(e.target)) setEditingId(null);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [editingId]);
 
   const startEdit = (label) => {
     setEditingId(label.id);
@@ -51,7 +61,7 @@ export default function LabelPanel({ labels, labelCounts = {}, selectedLabel, on
               </span>
             </div>
             {editingId === label.id && (
-              <div className="label-edit-form">
+              <div className="label-edit-form" ref={editFormRef}>
                 <input
                   className="label-name-input"
                   value={editName}
@@ -77,6 +87,12 @@ export default function LabelPanel({ labels, labelCounts = {}, selectedLabel, on
                   />
                 </div>
                 <div className="edit-actions">
+                  <button className="move-btn" onClick={() => onMoveLabel(editingId, -1)} disabled={labels.findIndex(l => l.id === editingId) === 0} title="Move left">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                  </button>
+                  <button className="move-btn" onClick={() => onMoveLabel(editingId, 1)} disabled={labels.findIndex(l => l.id === editingId) === labels.length - 1} title="Move right">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
                   <button className="save-btn" onClick={saveEdit}>Save</button>
                   <button className="cancel-btn" onClick={cancelEdit}>Cancel</button>
                   <button

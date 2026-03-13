@@ -184,6 +184,28 @@
   gap: 8px;
 }
 
+.move-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 8px;
+  background: var(--surface-2);
+  color: var(--text-dark);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.move-btn:hover:not(:disabled) {
+  background: var(--border-light);
+}
+
+.move-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 .save-btn {
   padding: 5px 14px;
   background: var(--surface-2);
