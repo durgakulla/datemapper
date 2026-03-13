@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc, collection, addDoc, deleteDoc, getDocs, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, collection, addDoc, deleteDoc, getDocs, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import Login from './components/Login';
 import DateRangePicker from './components/DateRangePicker';
@@ -152,7 +152,7 @@ export default function App() {
 
   const saveToCalendar = (calId, updates) => {
     if (!user || !calId) return;
-    setDoc(doc(db, 'users', user.uid, 'calendars', calId), updates, { merge: true });
+    updateDoc(doc(db, 'users', user.uid, 'calendars', calId), updates);
   };
 
   const save = (updates) => saveToCalendar(activeCalendarId, updates);
@@ -238,37 +238,47 @@ export default function App() {
     save({ dateMappings: {} });
   };
 
+  const pendingMappingsRef = useRef(dateMappings);
+  const saveRef = useRef(save);
+  useEffect(() => { saveRef.current = save; });
+  const isDraggingRef = useRef(false);
+
   const handleDayMouseDown = (key) => {
-    if (!selectedLabel) return;
-    const mode = dateMappings[key] === selectedLabel.id ? 'delete' : 'add';
+    const hasHighlight = !!dateMappings[key];
+    const mode = hasHighlight ? 'delete' : 'add';
+    if (mode === 'add' && !selectedLabel) return;
     const pending = { ...dateMappings };
     if (mode === 'add') { pending[key] = selectedLabel.id; } else { delete pending[key]; }
     setDateMappings(pending);
+    pendingMappingsRef.current = pending;
     setDragState({ mode, pending });
+    isDraggingRef.current = true;
   };
 
   const handleDayMouseEnter = (key) => {
-    if (!dragState || !selectedLabel) return;
+    if (!dragState) return;
     const pending = { ...dragState.pending };
-    if (dragState.mode === 'add') {
+    if (dragState.mode === 'add' && selectedLabel) {
       pending[key] = selectedLabel.id;
-    } else if (dragState.mode === 'delete' && pending[key] === selectedLabel.id) {
+    } else if (dragState.mode === 'delete' && pending[key]) {
       delete pending[key];
     }
     setDateMappings(pending);
+    pendingMappingsRef.current = pending;
     setDragState({ ...dragState, pending });
   };
 
   useEffect(() => {
     const handleMouseUp = () => {
-      if (dragState) {
-        save({ dateMappings: dragState.pending });
+      if (isDraggingRef.current) {
+        saveRef.current({ dateMappings: pendingMappingsRef.current });
         setDragState(null);
+        isDraggingRef.current = false;
       }
     };
     window.addEventListener('mouseup', handleMouseUp);
     return () => window.removeEventListener('mouseup', handleMouseUp);
-  }, [dragState]);
+  }, []);
 
   if (loading) return <div className="app-loading">Loading...</div>;
   if (!user) return <Login />;
