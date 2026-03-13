@@ -1,0 +1,39 @@
+.date-range-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.date-range-picker input {
+  padding: 0 8px;
+  height: 32px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.15s;
+  cursor: pointer;
+  max-width: 150px;
+  vertical-align: middle;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.date-range-picker input:focus {
+  border-color: #4a90d9;
+}
+
+.separator {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 600px) {
+  .date-range-picker input {
+    font-size: 0.78rem;
+    padding: 5px 6px;
+    max-width: 130px;
+  }
+}

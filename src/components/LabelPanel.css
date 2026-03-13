@@ -1,0 +1,230 @@
+.label-panel {
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 12px var(--shadow);
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.label-panel h3 { display: none; }
+.label-hint { display: none; }
+
+.label-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.clear-all-btn {
+  padding: 6px 10px;
+  background: none;
+  border: 1px solid #e5a0a0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #c0392b;
+  transition: border-color 0.1s, background 0.1s;
+}
+
+.clear-all-btn:hover {
+  background: #fff5f5;
+  border-color: #c0392b;
+}
+
+.add-label-btn {
+  padding: 0 10px;
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1;
+  align-self: stretch;
+  transition: border-color 0.1s, color 0.1s;
+}
+
+.add-label-btn:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.label-item {
+  border-radius: 8px;
+  transition: background 0.1s;
+  position: relative;
+}
+
+.label-item.selected .label-row {
+  background: var(--surface-3);
+  outline: 2px solid #4a90d9;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid var(--border-light);
+  transition: background 0.1s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.label-row:hover {
+  background: var(--surface-2);
+}
+
+.label-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.label-name {
+  flex: 1;
+  font-size: 0.78rem;
+  color: var(--text);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.label-count {
+  margin-left: 4px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.total-count {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.label-edit-form {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #4a90d9;
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 4px 20px var(--shadow-md);
+  min-width: 200px;
+}
+
+.label-name-input {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.label-name-input:focus {
+  border-color: #4a90d9;
+}
+
+.color-swatches {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.1s;
+}
+
+.swatch.active {
+  border-color: var(--text-dark);
+  transform: scale(1.2);
+}
+
+.swatch:hover {
+  transform: scale(1.15);
+}
+
+.color-picker {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  background: none;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.save-btn {
+  padding: 5px 14px;
+  background: var(--surface-2);
+  color: var(--text-dark);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: background 0.1s;
+}
+
+.save-btn:hover {
+  background: var(--border-light);
+}
+
+.cancel-btn {
+  padding: 5px 14px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.cancel-btn:hover {
+  background: var(--surface-2);
+}
+
+.delete-btn {
+  padding: 5px 14px;
+  background: var(--surface);
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  margin-left: auto;
+}
+
+.delete-btn:hover {
+  background: #fff5f5;
+}
